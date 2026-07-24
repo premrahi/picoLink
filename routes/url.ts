@@ -1,11 +1,10 @@
 import express  from "express";
-import { handleGenerateShortURL } from "../controllers/url";
+import { handleGenerateShortURL, handleGetAnalytics } from "../controllers/url";
 const router = express.Router() ;
 
 
-
-
-
 router.post('/' , handleGenerateShortURL) ;
+
+router.get('/analytics/:shortId',handleGetAnalytics )
 
 export default router ;

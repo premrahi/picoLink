@@ -8,12 +8,8 @@ if(!process.env.MONGODB_URI){
 
 const db_url:string =  process.env.MONGODB_URI ;
 
-const connectDB  = async() =>{
+export const connectDB  = async() =>{
     await mongoose.connect(db_url , {
         autoIndex :true ,
-    }).then(()=> console.log("DB connected!!!") )
-}
-
-module.exports = {
-    connectDB ,
+    })
 }
