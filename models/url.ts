@@ -4,6 +4,7 @@ export interface IUrl extends Document {
     shortId:string ;
     redirectURL : string ;
     visitHistory: Array<{timeStamp:number}> ;
+    createdBy: mongoose.Types.ObjectId;
     createdAt? : Date ;
     updatedAt? : Date ;
 }
@@ -21,6 +22,11 @@ const urlSchema = new Schema<IUrl>(
       required: true,
     },
     visitHistory: [{ timeStamp: { type: Number } }],
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true },
 );
