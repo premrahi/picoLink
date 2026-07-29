@@ -1,14 +1,13 @@
-import mongoose , {Schema , Document } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
 export interface IUrl extends Document {
-    shortId:string ;
-    redirectURL : string ;
-    visitHistory: Array<{timeStamp:number}> ;
-    createdBy: mongoose.Types.ObjectId;
-    createdAt? : Date ;
-    updatedAt? : Date ;
+  shortId: string;
+  redirectURL: string;
+  visitHistory: Array<{ timeStamp: number }>;
+  createdBy: mongoose.Types.ObjectId;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
-
 
 const urlSchema = new Schema<IUrl>(
   {
@@ -25,12 +24,12 @@ const urlSchema = new Schema<IUrl>(
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      index:true,
     },
   },
   { timestamps: true },
 );
 
-const URL = mongoose.model<IUrl>('url' , urlSchema) ;
+const URL = mongoose.model<IUrl>("url", urlSchema);
 
-export default URL ;
+export default URL;
