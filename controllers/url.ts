@@ -16,6 +16,7 @@ export async function handleGenerateShortURL(req: Request, res: Response) {
       shortId: shortID,
       redirectURL: body.url,
       visitHistory: [],
+      createdBy: body.createdBy || null,
     });
 
     return res.status(201).json({ id: shortID });
@@ -35,5 +36,15 @@ export async function handleGetAnalytics(req: Request, res: Response) {
   });
 }
 
+export async function trackUrls(req: Request, res: Response) {
+  try {
+    const userId = req.params.userID;
 
+    const urls = await URL.find({ createdBy: userId });
 
+    return res.status(200).json(urls);
+  } catch (error) {
+    console.error("Error in trackUrls controller:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
