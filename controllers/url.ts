@@ -57,24 +57,20 @@ export async function handleGetAnalytics(req: AuthenticatedRequest, res: Respons
       .map(([country, clicks]) => ({ country, clicks }))
       .sort((a, b) => b.clicks - a.clicks);
 
-       // --- Time-of-day breakdown: which hour (0-23, server-local time) engages the most ---
-    const hourCounts = new Array(24).fill(0);
+      const hourCounts = new Array(24).fill(0);
+    const dayCounts = new Array(7).fill(0); // 0 = Sunday
     for (const v of visits) {
-      const hour = new Date(v.timeStamp).getHours();
+      const { hour, day } = getZonedHourAndDay(v.timeStamp);
       hourCounts[hour]++;
+      dayCounts[day]++;
     }
     const byHour = hourCounts.map((clicks, hour) => ({ hour, clicks }));
     const peakHour = byHour.reduce(
       (best, cur) => (cur.clicks > best.clicks ? cur : best),
       byHour[0]
     );
-
-    // --- Day-of-week breakdown, useful alongside hour-of-day ---
-    const dayCounts = new Array(7).fill(0); // 0 = Sunday
-    for (const v of visits) {
-      dayCounts[new Date(v.timeStamp).getDay()]++;
-    }
     const byDayOfWeek = dayCounts.map((clicks, day) => ({ day, clicks }));
+
     
     // --- Device breakdown ---
     const deviceCounts = new Map<string, number>();
