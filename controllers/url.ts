@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { nanoid } from "nanoid";
 import URL from "../models/url";
 import { AuthenticatedRequest } from "../middlewares/auth";
+import { getZonedHourAndDay } from "../utils/timezone";
 
 export async function handleGenerateShortURL(req: AuthenticatedRequest, res: Response) {
   const body = req.body;
@@ -56,7 +57,7 @@ export async function handleGetAnalytics(req: AuthenticatedRequest, res: Respons
       .map(([country, clicks]) => ({ country, clicks }))
       .sort((a, b) => b.clicks - a.clicks);
 
-    // --- Time-of-day breakdown: which hour (0-23, server-local time) engages the most ---
+       // --- Time-of-day breakdown: which hour (0-23, server-local time) engages the most ---
     const hourCounts = new Array(24).fill(0);
     for (const v of visits) {
       const hour = new Date(v.timeStamp).getHours();
@@ -74,7 +75,7 @@ export async function handleGetAnalytics(req: AuthenticatedRequest, res: Respons
       dayCounts[new Date(v.timeStamp).getDay()]++;
     }
     const byDayOfWeek = dayCounts.map((clicks, day) => ({ day, clicks }));
-
+    
     // --- Device breakdown ---
     const deviceCounts = new Map<string, number>();
     for (const v of visits) {
